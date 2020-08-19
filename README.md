@@ -1,2 +1,3 @@
-# bot_floor-speechMX
-Bot to scrape congressional speeches of Mexican legislators
+# Webscraping Floor Speeches
+
+Webcrawler to retrieve congressional speeches of Mexican legislators. 
