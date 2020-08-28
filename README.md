@@ -1,6 +1,6 @@
 # Mexican Congressional Debates 
 
-This repository contains a `webcrawler` to scrape the Mexican Congressional Debates held in the **Cámara de Diputados** with a `structured database` that contains the interventions for each representative in the sessions. Also it is provided the metadata of each session (e.g the president of the Chamber, quorum). In the following sections are a summary of folders and files, along with a breif tutorial to use the webcrawler and scrape the raw data of the Congressional Debates. 
+This repo contains a `webcrawler` to scrape the Mexican Congressional Debates held in the **Cámara de Diputados** along with a  `structured database` that contains the interventions for each representative in the sessions. Also it is provided the a file that contains the metadata of each session (e.g the president of the Chamber, quorum). The following section contains a summary of the folders and files of this repo. 
 
 Main source: http://cronica.diputados.gob.mx
 
