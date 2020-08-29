@@ -4,6 +4,8 @@ This repo provides a  `dataset that contains processed text` for recent sessions
 
 The dataset includes all text spoken on the floor of each chamber of Congress: **Cámaras de Diputados** and **Cámara de Senadores**.  An automated script parses the text from each session to produce `full-text speeches`, `metadata on speeches,  their speakers and the session`. 
 
+Last update: 2020-08-28
+
 ## Project files
 
 ### Webcrawler: Using the scraper
