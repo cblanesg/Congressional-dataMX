@@ -1,2 +1,3 @@
 data/*
 webcrawler/notebooks/.ipynb_checkpoints/
+.DS_Store
