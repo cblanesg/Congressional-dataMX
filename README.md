@@ -1,8 +1,8 @@
 # MX Congressional Record
 
-This repo contains the `data of the congressional debates` for recent **Cámaras de Diputados** of the Mexican Congress. It also includes a `webcrawler`, along with its tutorial, to scrape the raw data of each congressional session. Data has been retrieved from the Camara's website (http://cronica.diputados.gob.mx).  Also it is provided the a file that contains the metadata of each session (e.g the president of the Chamber, quorum). The following section contains a summary of the folders and files of this repo.  
+This repo provides a  `dataset that contains processed text` for recent sessions at **Cámaras de Diputados** of the Mexican Congress. It also includes a `webcrawler` (along with its tutorial), to scrape the raw data of each congressional session. Data has been retrieved from the Camara's website (http://cronica.diputados.gob.mx).  
 
-Main source: http://cronica.diputados.gob.mx
+The dataset includes all text spoken on the floor of each chamber of Congress: **Cámaras de Diputados** and **Cámara de Senadores**.  An automated script parses the text from each session to produce `full-text speeches`, `metadata on speeches,  their speakers and the session`. 
 
 ## Project files
 
