@@ -1,3 +1,4 @@
+** On Progress **
 # MX Congressional Record
 
 This repo provides a  `dataset that contains processed text` for recent sessions at **Cámaras de Diputados** of the Mexican Congress. It also includes a `webcrawler` (along with its tutorial), to scrape the raw data of each congressional session. Data has been retrieved from the Camara's website (http://cronica.diputados.gob.mx).  
