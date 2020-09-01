@@ -23,4 +23,4 @@ The data is current as of **fecha de hoy**. There has been a post-processing of 
 * **data** - folder containing all the data and codebook. 
   * **metadata.csv** - csv file containing the metadata of each session
   * **congressional_debates.csv** - file containing the legislative debates at the level of session.
-  * **representartive_speeches.csv** - csv file with legislative debates at the level of representative.
+  * **representative_speeches.csv** - csv file with legislative debates at the level of representative.
