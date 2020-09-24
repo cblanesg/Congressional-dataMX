@@ -5,7 +5,7 @@ This repo provides a `dataset that contains measures of legislative behavior` **
 
 `All the datasets includes Legislatura LXV, LXI, LXII, LXIII, LXIV.`
 
-Last update: 2020-08-28
+Last update: 2020-09-24
 
 ## Project files
 
@@ -25,7 +25,7 @@ All webcrawlers are Python-based (almost all webcrawlers use Selenium).
 
 ### Data
 
-The data is current as of **2020-09-24**. There has been a post-processing of the data in comparison to the original sources. I recommend using the webcrawler if you need to use the original data without any pre-processing.
+The data is current as of **2020-09-24**. There has been a post-processing of the data in comparison to the original sources. I recommend using the webcrawler if you need to use the original data without any pre-processing (## indicates Legislatura)
 
 * **data** - folder containing all the data and codebook. 
   * **id_legislatura##.json** - code to obtain members of each Legislatura along with some metadata (estado, distrito, type of member (SSD, RP))
