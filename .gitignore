@@ -1,4 +1,8 @@
 data/*
 webcrawler/notebooks/.ipynb_checkpoints/
 .DS_Store
-source/.ipynb_checkpoints
+source/00-id_data/.ipynb_checkpoints
+source/01-floor_speech/.ipynb_checkpoints
+source/02-roll_call_votes/.ipynb_checkpoints
+source/03-legislation/.ipynb_checkpoints
+source/04-productivity_measures/.ipynb_checkpoints
