@@ -54,3 +54,54 @@ summary_attendance <- left_join(id_data_prop, attendance, by = c('id_legislador'
 
 sd(summary_attendance$n)
 summary(summary_attendance)
+
+
+
+###############
+# 3 Roll Call Votes
+###############
+
+
+votes <- read_csv('05-aggregated-data/roll_call_votes.csv') %>%
+  select(-c(X1))
+
+summary_votes <- left_join(id_data_prop, votes, by = c('id_legislador' = 'id', 'legislatura')) %>%
+  select(legislatura, id_legislador, voto) %>%
+  group_by(legislatura, id_legislador) %>%
+  summarise(
+    n = n()
+  )
+
+
+sd(summary_votes$n)
+summary(summary_votes)
+
+
+
+###############
+# 3 Legislation
+###############
+
+bills <- read_csv('05-aggregated-data/bills_proposed.csv') %>%
+  select(-c(X1))
+
+summary_bills <- left_join(id_data_prop, bills, by = c('id_legislador' = 'id', 'legislatura')) %>%
+  select(legislatura, id_legislador) %>%
+  group_by(legislatura, id_legislador) %>%
+  summarise(
+    n = n()
+  )
+
+sd(summary_bills$n)
+summary(summary_bills)
+
+
+
+
+
+
+
+
+
+
+
