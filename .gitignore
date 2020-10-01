@@ -1,9 +1,10 @@
 data/*
 webcrawler/notebooks/.ipynb_checkpoints/
 .DS_Store
-source/00-id_data/.ipynb_checkpoints
-source/01-floor_speech/.ipynb_checkpoints
-source/02-roll_call_votes/.ipynb_checkpoints
-source/03-legislation/.ipynb_checkpoints
-source/04-productivity_measures/.ipynb_checkpoints
+source/01-collection_data/00-id_data/.ipynb_checkpoints
+source/01-collection_data/01-floor_speech/.ipynb_checkpoints
+source/01-collection_data/02-roll_call_votes/.ipynb_checkpoints
+source/01-collection_data/03-legislation/.ipynb_checkpoints
+source/01-collection_data/04-productivity_measures/.ipynb_checkpoints
+source/01-collection_data/06-summary_statistics/.ipynb_checkpoints
 webcrawler/*
