@@ -20,7 +20,7 @@ All webcrawlers are Python-based (almost all webcrawlers use Selenium).
   * **floor_speech.py** - intervention on each member in all debate sessions. 
   * **debate.py** - full-text of debate
   * **floor_attendance.py** - floor attendance of members in each session
-  * **roll_call-votes.py** - voting status on each bill 
+  * **roll_call-votes.py** - roll call votes in sessions
   * **bills_proposed.py** - members' bills proposed and status of bill (approved, declined, on process). 
 
 
@@ -36,5 +36,5 @@ The data is current as of **2020-09-24**. There has been a post-processing of th
   * **floor_speech##.json** - intervention on each member in all debate sessions. 
   * **debate##.json** - full-text of debate
   * **floor_attendance##.json** - floor attendance of members in each session
-  * **roll_call-votes##.json** - voting status on each bill 
+  * **roll_call-votes##.json** - roll call votes in sessions
   * **bills_proposed##.json** - members' bills proposed and status of bill (approved, declined, on process). 
