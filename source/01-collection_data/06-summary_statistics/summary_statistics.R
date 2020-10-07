@@ -203,34 +203,59 @@ committe <- read_csv('05-aggregated-data/committee_data.csv') %>%
 summary_committe <- left_join(id_data_prop, committe, by = c('id_legislador', 'legislatura')) %>%
   select(legislatura, tipo_legislador, id_legislador, comision) %>%
   mutate(counter = ifelse(is.na(comision), 0, 1), 
-         reform = ifelse(legislatura < 64, 'pre', 'post')) %>%
+         reform = ifelse(legislatura < 64, 'pre', 'post')) 
+
+### Type
+
+time_comm <- summary_committe%>%
+  select(reform, tipo_legislador, id_legislador, counter) %>%
+  group_by(tipo_legislador, id_legislador) %>%
+  summarise(
+    n = sum(counter)
+  ) 
+
+x <- time_comm %>%
+  filter(tipo_legislador == 'Representacion proporcional')
+
+y <- time_comm %>%
+  filter(tipo_legislador == 'Mayoria Relativa')
+
+t.test(x$n, y$n, alternative="two.sided")
+r = t.test(x$n, y$n, alternative="two.sided")
+r$statistic
+
+
+#### Within Type
+
+type_comm <- summary_committe %>%
   select(reform, tipo_legislador, id_legislador, counter) %>%
   group_by(reform, tipo_legislador, id_legislador) %>%
   summarise(
     n = sum(counter)
   ) 
-unique(summary_committe$tipo_legislador)
 
-x_pre <- summary_committe %>%
+
+x_pre <- type_comm %>%
   filter(tipo_legislador == 'Representacion proporcional' & reform == 'pre')
-
-y_pre <- summary_committe %>%
-  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'pre')
-
-result = t.test(x_pre$n, y_pre$n, alternative="two.sided")
-tidy(result)
-result$stderr
-
-
-x_post <- summary_committe %>%
+unique(type_comm$tipo_legislador)
+y_post <- type_comm %>%
   filter(tipo_legislador == 'Representacion proporcional' & reform == 'post')
 
-y_post <- summary_committe %>%
-  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'post')
-
-result = t.test(x_post$n, y_post$n, alternative="two.sided")
+result = t.test(x_pre$n, y_post$n, alternative="two.sided")
 tidy(result)
 result$stderr
+
+
+x_pre <- type_comm %>%
+  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'pre')
+unique(type_comm$tipo_legislador)
+y_post <- type_comm %>%
+  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'post')
+
+result = t.test(x_pre$n, y_post$n, alternative="two.sided")
+tidy(result)
+result$stderr
+
 
 ###############
 # 3 Floor Speeches
@@ -239,8 +264,9 @@ speech <- read_csv('05-aggregated-data/counts_speech.csv') %>%
   select(-c(X1))
 
 summary_speech <- speech %>%
-  left_join()
-  mutate(reform = ifelse(legislatura < 64, 'pre', 'post'))
+  right_join(id_data_prop, by = c('legislatura', 'id' = 'id_legislador')) %>%
+  mutate(reform = ifelse(legislatura < 64, 'pre', 'post')) %>%
+  select(reform, legislatura, counter, id, tipo_legislador)
 
 x <- summary_speech %>%
   filter(reform == 'post')
@@ -252,6 +278,40 @@ result = t.test(x$counter, y$counter, alternative="two.sided")
 tidy(result)
 result$stderr
 
+
+x <- summary_speech %>%
+  filter(reform == 'pre' & tipo_legislador == 'Mayoria Relativa')
+
+y <- summary_speech %>%
+  filter(reform == 'post'& tipo_legislador == 'Mayoria Relativa')
+
+result = t.test(x$counter, y$counter, alternative="two.sided")
+tidy(result)
+result$stderr
+
+
+x <- summary_speech %>%
+  filter(reform == 'pre' & tipo_legislador == 'Representacion proporcional')
+
+y <- summary_speech %>%
+  filter(reform == 'post'& tipo_legislador == 'Representacion proporcional')
+
+result = t.test(x$counter, y$counter, alternative="two.sided")
+tidy(result)
+result$stderr
+
+
+x <- summary_speech %>%
+  filter(tipo_legislador == 'Representacion proporcional')
+
+y <- summary_speech %>%
+  filter(tipo_legislador == 'Mayoria Relativa')
+
+result = t.test(x$counter, y$counter, alternative="two.sided")
+tidy(result)
+result$stderr
+
+
 ###############
 # 2 Floor Attendance
 ###############
@@ -261,25 +321,47 @@ attendance <- read_csv('05-aggregated-data/attendance_data.csv') %>%
   select(-c(X1))
 
 summary_attendance <- left_join(id_data_prop, attendance, by = c('id_legislador' = 'id', 'legislatura')) %>%
-  select(tipo_legislador, id_legislador, type_attendance) %>%
-  mutate(attendance_num = ifelse(type_attendance == 'asistencia', 1, 0)) %>%
-  group_by(tipo_legislador, id_legislador) %>%
-  mutate(n = n())%>%
-  group_by(tipo_legislador, id_legislador) %>%
+  select(legislatura, tipo_legislador, id_legislador, type_attendance) %>%
+  mutate(attendance_num = ifelse(type_attendance == 'asistencia', 1, 0)) 
+
+
+time_att<- summary_attendance %>%
+  group_by(legislatura, tipo_legislador, id_legislador) %>%
+  mutate(n = n()) %>%
+  group_by(legislatura, tipo_legislador, id_legislador) %>%
   mutate(n_attendance = sum(attendance_num)) %>%
-  select(tipo_legislador, id_legislador, n, n_attendance) %>%
+  select(legislatura, tipo_legislador, id_legislador, n, n_attendance) %>%
   distinct() %>%
-  mutate(pct_attendance = n_attendance/n)
+  mutate(pct_attendance = n_attendance/n) %>%
+  mutate(reform = ifelse(legislatura < 64, 'pre', 'post'))
 
-
-sd(summary_attendance$n)
-summary(summary_attendance)
-
-x <- summary_attendance %>%
+x <- time_att %>%
   filter(tipo_legislador == 'Representacion proporcional')
 
-y <- summary_attendance %>%
+y <- time_att %>%
   filter(tipo_legislador == 'Mayoria Relativa')
+
+result = t.test(x$pct_attendance, y$pct_attendance, alternative="two.sided")
+tidy(result)
+result$stderr
+
+
+## within type
+x <- time_att %>%
+  filter(tipo_legislador == 'Representacion proporcional' & reform == 'pre')
+
+y <- time_att %>%
+  filter(tipo_legislador == 'Representacion proporcional' & reform == 'post')
+
+result = t.test(x$pct_attendance, y$pct_attendance, alternative="two.sided")
+tidy(result)
+result$stderr
+
+x <- time_att %>%
+  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'pre')
+
+y <- time_att %>%
+  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'post')
 
 result = t.test(x$pct_attendance, y$pct_attendance, alternative="two.sided")
 tidy(result)
@@ -312,12 +394,13 @@ votes <- left_join(id_data_prop, votes, by = c('id_legislador' = 'id', 'legislat
   filter(!is.na(titulo_votacion)) %>%
   left_join(party_votes, by = c('legislatura', 'titulo_votacion', 'party'))%>%
   mutate(vote_with_party = ifelse(voto_num  == voto_party, 1, 0)) %>%
-  group_by(tipo_legislador, id_legislador) %>%
+  group_by(legislatura, tipo_legislador, id_legislador) %>%
   mutate(n = n(), 
          num_vote_with_party = sum(vote_with_party)) %>%
-  select(tipo_legislador, id_legislador, num_vote_with_party, n) %>%
+  select(legislatura, tipo_legislador, id_legislador, num_vote_with_party, n) %>%
   distinct() %>%
-  mutate(pct_vote_with_party = num_vote_with_party/n) 
+  mutate(pct_vote_with_party = num_vote_with_party/n, 
+         reform = ifelse(legislatura < 64, 'pre', 'post')) 
 
 x <- votes %>%
   filter(tipo_legislador == 'Representacion proporcional')
@@ -327,21 +410,29 @@ y <- votes %>%
 
 result = t.test(x$pct_vote_with_party, y$pct_vote_with_party, alternative="two.sided")
 result$stderr
+tidy(result)
 
 
+x <- votes %>%
+  filter(tipo_legislador == 'Representacion proporcional' & reform == 'pre')
 
-summary_votes <- left_join(id_data_prop, votes, by = c('id_legislador' = 'id', 'legislatura')) %>%
-  select(legislatura, id_legislador, voto) %>%
-  group_by(legislatura, id_legislador) %>%
-  summarise(
-    n = n()
-  )
+y <- votes %>%
+  filter(tipo_legislador == 'Representacion proporcional' & reform == 'post')
 
-
-sd(summary_votes$n)
-summary(summary_votes)
+result = t.test(x$pct_vote_with_party, y$pct_vote_with_party, alternative="two.sided")
+result$stderr
+tidy(result)
 
 
+x <- votes %>%
+  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'pre')
+
+y <- votes %>%
+  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'post')
+
+result = t.test(x$pct_vote_with_party, y$pct_vote_with_party, alternative="two.sided")
+result$stderr
+tidy(result)
 
 ###############
 # 3 Legislation
@@ -351,11 +442,12 @@ bills <- read_csv('05-aggregated-data/bills_proposed.csv') %>%
   select(-c(X1))
 
 summary_bills <- left_join(id_data_prop, bills, by = c('id_legislador' = 'id', 'legislatura')) %>%
-  select(tipo_legislador, id_legislador) %>%
-  group_by(tipo_legislador, id_legislador) %>%
+  select(legislatura, tipo_legislador, id_legislador) %>%
+  group_by(legislatura, tipo_legislador, id_legislador) %>%
   summarise(
     n = n()
-  )
+  ) %>%
+  mutate(reform = ifelse(legislatura < 64, 'pre', 'post'))
 
 x <- summary_bills %>%
   filter(tipo_legislador == 'Representacion proporcional')
@@ -365,27 +457,30 @@ y <- summary_bills %>%
 
 result = t.test(x$n, y$n, alternative="two.sided")
 result$stderr
-
-
-bills <- read_csv('05-aggregated-data/bills_proposed.csv') %>%
-  select(-c(X1))
-
-summary_bills <- left_join(id_data_prop, bills, by = c('id_legislador' = 'id', 'legislatura')) %>%
-  filter(legislatura < 64) %>%
-  select(tipo_legislador, id_legislador) %>%
-  group_by(tipo_legislador, id_legislador) %>%
-  summarise(
-    n = n()
-  )
+tidy(result)
 
 x <- summary_bills %>%
-  filter(tipo_legislador == 'Representacion proporcional')
+  filter(tipo_legislador == 'Representacion proporcional' & reform == 'pre' )
 
 y <- summary_bills %>%
-  filter(tipo_legislador == 'Mayoria Relativa')
+  filter(tipo_legislador == 'Representacion proporcional' & reform == 'post' )
 
 result = t.test(x$n, y$n, alternative="two.sided")
 result$stderr
+tidy(result)
+
+tidy(result)
+
+x <- summary_bills %>%
+  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'pre' )
+
+y <- summary_bills %>%
+  filter(tipo_legislador == 'Mayoria Relativa' & reform == 'post' )
+
+result = t.test(x$n, y$n, alternative="two.sided")
+result$stderr
+tidy(result)
+
 
 
 
