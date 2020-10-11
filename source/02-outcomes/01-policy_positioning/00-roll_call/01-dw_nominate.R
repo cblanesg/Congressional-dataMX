@@ -33,9 +33,27 @@ votes <- read_csv('../02-outcomes/01-policy_positioning/00-roll_call/00-prep_dat
   select(id_legislador, partido, voto_num, bill)
 
 
+folder <- "../02-outcomes/01-policy_positioning/00-roll_call/00-prep_data/"
+files <- list.files(folder, pattern = ".csv$")
+legislaturas <- c('60', '61','62', '63', '64')
+
+
+file_votes <- list()
+for (i in 1:length(files)){
+  d <- read_csv(file = paste0('../02-outcomes/01-policy_positioning/00-roll_call/00-prep_data/', files[[i]])) %>%
+    select(-c(X1)) %>%
+    mutate(voto_num = ifelse(vote == 'A favor', '1', 
+                             ifelse(vote == 'En contra', '6', '9')), 
+           legis = legislaturas[[i]]) %>%
+    select(legis, id_legislador, partido, voto_num, bill)
+  file_votes[[i]] <- d
+}
+
 #############################
 # 1.0 Ideal Point Estimations
 #############################
+
+
 
 estimation_dwnominate <- function(votes,legislatura){
   matrix_roll_call <- votes %>%
@@ -67,5 +85,12 @@ estimation_dwnominate <- function(votes,legislatura){
   return(result)
 }
 
-r <- estimation_dwnominate(votes = votes, '61')
+list_results <- list()
+for (i in 1:length(file_votes)){
+  df <- file_votes[[i]]
+  legis <- unique(df$legis)
+  df <- df %>% select(-c(legis))
+  r <- estimation_dwnominate(votes = df, legis)
+  list_results[[i]] <- r
+}
 
