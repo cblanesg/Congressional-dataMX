@@ -1,11 +1,11 @@
 ** On Progress **
 # MX Congressional Data
 
-This repo provides a `dataset that contains measures of legislative behavior` **Cámara de Diputado's members** of the Mexican Congress. This corpus contains four groups of files: (i) id data of members (including career track and participation in committees) (ii) floor speech data (interventions of each members in debates, metadata of debate, metadata of speaker) (iii) roll call votes, (v) legislative data (bills proposed, etc.) (iv) legislative effort (measure composed of previous variables). For each group of file is also provided webscraping code where the data was obtained (http://www.diputados.gob.mx/sistema_legislativo_LXIV.html). 
+This repo provides a `dataset that contains legislative behavior measures of` the Chamber of Deputie's members of the Mexican Congress. This corpus contains five groups of files: (i) id data of members (including career track and participation in committees) (ii) floor speech data (interventions of each member in debates, metadata of debate, metadata of speaker) (iii) roll call votes, (v) legislative data (bills proposed, etc.) (iv) legislative effort (measure composed of previous variables). (v) Idealogy Positioning (ideal point estimations from roll call votes and from speech). For each group of file is also provided webscraping code. All the data was obtained from (http://www.diputados.gob.mx/sistema_legislativo_LXIV.html). 
 
-`All the datasets includes Legislatura LXV, LXI, LXII, LXIII, LXIV.`
+`Terms: Legis LXV, LXI, LXII, LXIII, LXIV.`
 
-Last update: 2020-09-24
+Last update: 2020-10-11
 
 ## Project files
 
