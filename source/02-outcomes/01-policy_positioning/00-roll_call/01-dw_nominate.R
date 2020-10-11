@@ -26,7 +26,7 @@ nrow(id_data)
 # 0.1 Load Data- Roll Call Votes
 ###############################
 
-votes <- read_csv('../02-outcomes/01-policy_positioning/00-roll_call/00-prep_data/roll_call_votes60.csv') %>%
+votes <- read_csv('../02-outcomes/01-policy_positioning/00-roll_call/00-prep_data/roll_call_votes61.csv') %>%
   select(-c(X1)) %>%
   mutate(voto_num = ifelse(vote == 'A favor', '1', 
                            ifelse(vote == 'En contra', '6', '9'))) %>%
@@ -67,5 +67,5 @@ estimation_dwnominate <- function(votes,legislatura){
   return(result)
 }
 
-r <- estimation_dwnominate(votes = votes, '60')
+r <- estimation_dwnominate(votes = votes, '61')
 
