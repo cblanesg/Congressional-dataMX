@@ -32,13 +32,14 @@ folder <- "../02-outcomes/01-policy_positioning/00-roll_call/00-prep_data/"
 files <- list.files(folder, pattern = ".csv$")
 legislaturas <- c('60', '61','62', '63', '64')
 
-
+unique(d$vote)
 file_votes <- list()
 for (i in 1:length(files)){
   d <- read_csv(file = paste0('../02-outcomes/01-policy_positioning/00-roll_call/00-prep_data/', files[[i]])) %>%
     select(-c(X1)) %>%
     mutate(voto_num = ifelse(vote == 'A favor', '1', 
-                             ifelse(vote == 'En contra', '6', '9')), 
+                             ifelse(vote == 'En contra', '6', 
+                                    ifelse(vote == 'missing', NA, '9'))), 
            legis = legislaturas[[i]]) %>%
     select(legis, id_legislador, partido, voto_num, bill)
   file_votes[[i]] <- d
@@ -62,7 +63,7 @@ obtain_rollcall_obj <- function(df){
                  yea = c('1'), 
                  nay = c('6'), 
                  missing = c('9'), 
-                 notInLegis = 0,
+                 notInLegis = NA,
                  legis.names = LEGnames, legis.data = legData,
                  desc = "Mexican Deputies Chamber"
   )
@@ -94,16 +95,6 @@ for (i in 1:length(file_votes)){
 # 1.1 Ideal Point Estimations
 #############################
 
-rc <- rollcall(matrix_roll_call, 
-               yea = c('1'), 
-               nay = c('6'), 
-               missing = c('9'), 
-               notInLegis = 0,
-               legis.names = LEGnames, legis.data = legData,
-               desc = "Mexican Deputies Chamber"
-)
-
-
 estimation_dwnominate <- function(votes,legislatura, anchors){
   matrix_roll_call <- votes %>%
     spread(bill, value = voto_num) %>%
@@ -117,13 +108,13 @@ estimation_dwnominate <- function(votes,legislatura, anchors){
                  yea = c('1'), 
                  nay = c('6'), 
                  missing = c('9'), 
-                 notInLegis = 0,
+                 notInLegis = NA,
                  legis.names = LEGnames, legis.data = legData,
                  desc = "Mexican Deputies Chamber"
   )
   result <- wnominate(rc, polarity = c(anchors), dim = 1)
 
-    save(result, file = paste0('~/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/01-ideal_points/dw_nominate', legislatura, '.Rda'))
+  save(result, file = paste0('~/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/01-ideal_points/dw_nominate', legislatura, '.Rda'))
   return(result)
 }
 
@@ -137,7 +128,7 @@ for (i in 1:length(file_votes)){
 }
 
 #####################
-# 1.1 Make Nice Plots
+# 2.0 Make Nice Plots
 #####################
 
 rank_plots <- function(result, legis){
