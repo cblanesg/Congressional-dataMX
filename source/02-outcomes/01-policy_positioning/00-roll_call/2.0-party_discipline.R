@@ -1,4 +1,5 @@
 library(tidyverse)
+library(tidyr)
 
 setwd('~/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/01-collection_data/')
 
@@ -70,8 +71,32 @@ result = t.test(x$abs_dif_with_party, y$abs_dif_with_party, alternative="two.sid
 tidy(result)
 result$stderr
 
-ggplot(df_ideal_points, aes(x = abs_dif_with_party, colour = reform)) + 
-  geom_density()
+x <- df_ideal_points %>%
+  filter(tipo_legislador == 'Representacion proporcional' &  reform == 'pre' )
+mean(x$abs_dif_with_party, na.rm = TRUE)
+y <- df_ideal_points %>%
+  filter(tipo_legislador == 'Representacion proporcional')
+
+result = t.test(x$abs_dif_with_party, y$abs_dif_with_party, alternative="two.sided")
+tidy(result)
+result$stderr
+
+x <- df_ideal_points %>%
+  filter(tipo_legislador == 'Representacion proporcional' )
+mean(x$abs_dif_with_party, na.rm = TRUE)
+y <- df_ideal_points %>%
+  filter(tipo_legislador == 'Mayoria Relativa')
+
+result = t.test(x$abs_dif_with_party, y$abs_dif_with_party, alternative="two.sided")
+tidy(result)
+result$stderr
+
+######## 
+########
+
+
+
+
 
 
 
