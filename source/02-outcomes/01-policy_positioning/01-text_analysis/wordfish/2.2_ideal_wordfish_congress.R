@@ -30,29 +30,109 @@ lapply(list.packages,
        require,
        character.only = TRUE)
 
-## One Topic, One Congress
+## One Topic, One Congress: Health LX
 
 ## load re-labaled speeches
 
 load('wordfish/01_lda/speeches_20k.Rda', verbose = TRUE)
 dataFiles <- lapply(Sys.glob("01-clean_data/disaaggregated_data/*xlsx"), read_excel)
 party_data <- rbind(select(dataFiles[[1]], c(id_speech,inc_party)), 
-                         select(dataFiles[[2]], c(id_speech,inc_party)), 
-                         select(dataFiles[[3]], c(id_speech,inc_party)), 
-                         select(dataFiles[[4]], c(id_speech,inc_party)), 
-                         select(dataFiles[[5]], c(id_speech,inc_party))) 
+                    select(dataFiles[[2]], c(id_speech,inc_party)), 
+                    select(dataFiles[[3]], c(id_speech,inc_party)), 
+                    select(dataFiles[[4]], c(id_speech,inc_party)), 
+                    select(dataFiles[[5]], c(id_speech,inc_party))) 
 
-data_speech <- docs_20k %>%
-  filter(topic_label == 'genero')  %>%
-  left_join(party_data, by = 'id_speech')
+top10_topics <- unique(subset(docs_20k, top10_topics == 1)$topic_label)
+all_topics <- unique(docs_20k$topic_label)
+legistalturas <- unique(docs_20k$legislatura)
 
+
+obtain_directions_pan <- function(subset){
+  subset_data$counter <- c(1:nrow(subset_data))
+  unique(subset_data$inc_party)
+  
+  pan_values <- subset_data %>%
+    filter(inc_party == 'Partido Acción Nacional')
+  
+  pan_values <- pan_values$counter[1]
+  
+  return(pan_values)
+}
+
+obtain_directions_prd <- function(subset){
+  subset_data$counter <- c(1:nrow(subset_data))
+  unique(subset_data$inc_party)
+  
+  prd_values <- subset_data %>%
+    filter(inc_party == "Partido de la Revolución Democrática")
+  
+  prd_values <- prd_values$counter[1]
+  
+  return(prd_values)
+}
+
+models <- list()
+estimates <- list()
+for (i in all_topics){
+  for (j in legistalturas){
+    
+    subset_data <- docs_20k %>%
+      left_join(party_data, by = 'id_speech')%>%
+      filter(topic_label == i)  %>%
+      filter(legislatura == j) %>%
+      group_by(id_legislador, inc_party) %>%
+      summarise(clean_speech = paste0(clean_speech, collapse = ' '))
+    
+    #print(nrow(subset_data))
+    pan_direction = obtain_directions_pan(subset_data)
+    prd_direction = obtain_directions_prd(subset_data)
+    
+    dfm_ob <- dfm(subset_data$clean_speech)
+    dfm_trim <- dfm_trim(dfm_ob, min_termfreq = 1, min_docfreq = 2)
+    dfm_trim@docvars$docname_ <- subset_data$id
+    dfm_trim@docvars$docid_ <- subset_data$id
+    
+    wf_q <- textmodel_wordfish(dfm_trim, dir = c(prd_direction, pan_direction))
+    wf_q$docs <- subset_data$id
+    
+    df <- select(subset_data, id_legislador, inc_party)
+    df$estimated_theta <- wf_q$theta
+    df$legislatura <- j
+    df$topic <- i
+    
+    models[[paste0(i, '_', j)]] <- wf_q
+    estimates[[paste0(i, '_', j)]] <- df
+    
+    # name_file_model = paste0('./wordfish/2-model/wordfish_', j ,'legis', '.Rda')
+    # name_file_estimates = paste0('./wordfish/2.1-model_estimates/estimates_', j ,'legis', '.Rda')
+    # 
+    # save(df, file = name_file_estimates)
+    # save(wf_q, file = name_file_estimates)
+    
+    
+    # features_plots <- textplot_scale1d(wf_q, 
+    #                  margin = "features", 
+    #                  highlighted_color = "black")
+    # name_plot <- paste0('./wordfish/3-figures/features_', i, '_', j ,'legis', '.png')
+    # ggsave(name_plot)
+    # 
+  }
+}
+
+save(models, file = 'wordfish/2-model/wordfish_model.Rda')
+
+all_estimates <- bind_rows(estimates)
+save(all_estimates, file = 'wordfish/2.1-model_estimates/all_estimates.Rda')
+
+
+'./wordfish/3-figures/'
 
 dfm_ob <- dfm(data_speech$clean_speech)
 dfm_trim <- dfm_trim(dfm_ob, min_termfreq = 1, min_docfreq = 2)
 dfm_trim@docvars$docname_ <- data_speech$id
 dfm_trim@docvars$docid_ <- data_speech$id
 
-wf_q <- textmodel_wordfish(dfm_trim, dir = c(28, 135))
+wf_q <- textmodel_wordfish(dfm_trim, dir = c(328, 135))
 wf_q$docs <- data_speech$id
 textplot_scale1d(wf_q, margin = "documents")
 textplot_scale1d(wf_q, margin = "features")
@@ -63,9 +143,11 @@ df$beta <- wf_q$beta
 df %>% top_n(30)
 df %>% top_n(-30)
 
-df <- data.frame(matrix(unlist(data_speech$id), nrow=length(data_speech$id), byrow=T))
+df <- select(subset_data, id_legislador, inc_party)
 df$estimated_theta <- wf_q$theta
-colnames(df) <- c('id', 'theta')
+df$legislatura <- j
+
+select(subset_data, id_legislador, inc_party)
 
 df_parties  <- df %>%
   left_join(id_data, by = 'id') 

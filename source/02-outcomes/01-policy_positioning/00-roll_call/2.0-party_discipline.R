@@ -61,15 +61,24 @@ df_ideal_points <- all_data %>%
   left_join(id_data, by = c('id_inc' = 'id_legislador', 
                             'legis' = 'legislatura'))
 
+save(df_ideal_points, file = '../02-outcomes/01-policy_positioning/00-roll_call/03-party_discipline/party_discipline_rollCall.Rda')
+
+
+
+### difference in means
+df_ideal_points %>%
+  filter(reform == 'pre' & tipo_legislador == 'Mayoria Relativa' ) %>%
+  summarise(mean(abs_dif_with_party, na.rm = TRUE))
+
+
 x <- df_ideal_points %>%
-  filter(reform == 'pre')
+  filter(reform == 'post' & tipo_legislador == 'Representacion proporcional')
 
 y <- df_ideal_points %>%
-  filter(reform == 'post')
+  filter(reform == 'post' & tipo_legislador == 'Mayoria Relativa')
 
 result = t.test(x$abs_dif_with_party, y$abs_dif_with_party, alternative="two.sided")
-tidy(result)
-result$stderr
+result
 
 x <- df_ideal_points %>%
   filter(tipo_legislador == 'Representacion proporcional' &  reform == 'pre' )

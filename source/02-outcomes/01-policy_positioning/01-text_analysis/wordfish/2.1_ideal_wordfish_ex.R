@@ -30,29 +30,24 @@ lapply(list.packages,
        require,
        character.only = TRUE)
 
-## One Topic, One Congress
+## One Topic, One Congress: Health LX
 
 ## load re-labaled speeches
 
 load('wordfish/01_lda/speeches_20k.Rda', verbose = TRUE)
-dataFiles <- lapply(Sys.glob("01-clean_data/disaaggregated_data/*xlsx"), read_excel)
-party_data <- rbind(select(dataFiles[[1]], c(id_speech,inc_party)), 
-                         select(dataFiles[[2]], c(id_speech,inc_party)), 
-                         select(dataFiles[[3]], c(id_speech,inc_party)), 
-                         select(dataFiles[[4]], c(id_speech,inc_party)), 
-                         select(dataFiles[[5]], c(id_speech,inc_party))) 
 
 data_speech <- docs_20k %>%
-  filter(topic_label == 'genero')  %>%
-  left_join(party_data, by = 'id_speech')
+  filter(topic_label == 'genero')
 
+data_speech %>% 
+  select()
 
 dfm_ob <- dfm(data_speech$clean_speech)
 dfm_trim <- dfm_trim(dfm_ob, min_termfreq = 1, min_docfreq = 2)
 dfm_trim@docvars$docname_ <- data_speech$id
 dfm_trim@docvars$docid_ <- data_speech$id
 
-wf_q <- textmodel_wordfish(dfm_trim, dir = c(28, 135))
+wf_q <- textmodel_wordfish(dfm_trim, dir = c(28, 1))
 wf_q$docs <- data_speech$id
 textplot_scale1d(wf_q, margin = "documents")
 textplot_scale1d(wf_q, margin = "features")
