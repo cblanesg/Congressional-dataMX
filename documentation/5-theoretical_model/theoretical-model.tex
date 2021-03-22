@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+
+\title{Summary Statistics}
+
+\author{Camila Blanes}
+\date{}
+\begin{document}
+
+\subsection*{Theoretical Expectations}
+
+Political institutions affect legislative behavior and other outcomes such as party unity. Specifically, electoral systems can affect behavior in two ways. First, in they shape the  incentives of party leaders to select candidates to run for office. The candidate selection mechanisms will have an impact on legislative behavior and the degree to which parties exercise control over their members. Second, they affect on how legislators trade-off the value of their own policy position and party unity. Consequently, the resulting behavior will affect important outcomes such as how responsive are legislators with their constituency or how members align with the party. 
+
+\subsubsection*{Electoral Systems and Political Selection}
+Electoral rules affect political leader's selection criteria when choosing candidates. The electoral system determines how votes are translated into seats. In proportional representation systems, the voter cast a ballot for the party. Therefore, elections are party-centered and party leaders will benefit from creating a strong and unified party brand. In majoritarian systems parties benefits from having popular candidates that are able to develop a personal voting base and to state a personal policy position to get closer to their constituency, even if that means to deviate from the party line. \\
+\\ These two electoral systems create incentives that affects how parties assigns weights to their interests. In mixed electoral systems, parties  can face a collective action problem: while the party benefits from members showing a unified party policy, candidates running by majoritarian election may be better of by presenting their own policy position. This institutional variation will affect on the type of candidates elected in the two types of system. The type will also affect the performance of the legislator. 
+
+\subsubsection*{Electoral Systems and Legislative Behavior}
+
+The electoral institution will also affect the behavior of political actors once they are elected. Legislative members and party leaders value the \textbf{national party line}, \textbf{their own ideological position} and their \textbf{constituency preferences}. The political institution creates incentives that will affect on how members assign weights to these preferences. PR members will assign a higher value to the party line because reelection in completely dependent on the party. On the other side, members elected from majoritarian systems, wil have to be more responsive to their electorate in order to be reelected. Although the 2014 electoral reform gives the parties the control to allow the reelection of the candidates, these incumbents have a new principal that also gets to decide how stays in office. As parties also benefit from having popular candidates through this electoral path, they will allow intra-party dissent. \\
+\\
+The relationship with the party will be determined by the electoral system. Party cohesion is usually measured through roll-call voting. With the assumption that roll-call votes signals party disunity. However, roll-call votes are not the only way parties can display party disunity. For this purpose, we will consider legislative speech. In every debate intervention the member has to decide whether to represent their own policy and true preferences or align with the party message. Speeches are a result of an strategic decisions that also reflects intraparty politics. \\
+\\ 
+\textbf{H1:} Legislators elected in PR system will deviate less from the party line than legislators elected in single-seat districts.  
+
+
+\subsubsection*{Reelection and Legislative Behavior}
+
+Reelection incentives also affects how legislators behave, it makes office-seeking agents to cultivate their personal reputation even in party-centered systems. It also affects the incentives to perform better in the Chamber. Leveraging the introduction of reelection for federal legislators, we measure the effect that has on legislative productivity and how the relationship between members and parties change. \\
+\\ 
+\textbf{H2:} The introduction of reelection incentives will increase the legislative productivity and effort from politicians. The effect will be stronger in single-seat districts members. \\
+\\ 
+\textbf{H3:} The introduction of reelection incentives will increase the value of expressing their own policy position for single seat district members. 
+
+\subsection*{Empirical Strategy}
+
+We implement a difference-in-differences estimator with the following specification:
+\begin{equation}
+Y_{i, t} = \alpha + \beta (electoral\_system)_t + \delta X_i + \mu_t + \epsilon_{i, t}
+\end{equation}
+\begin{equation}
+Y_{i, t} = \alpha + \beta T_t + \delta X_i  + \mu_t + \epsilon_{i, t}
+\end{equation}
+\begin{equation}
+Y_{i, t} = \alpha + \beta (electoral\_system)_t * T_t  + \delta X_i  + \mu_t + \epsilon_{i, t}
+\end{equation}
+
+where $Y_{i, t}$ is the effort measurements for legislator \textit{i} in the term \textit{t} \textit{(where t = Legislatura 60, 61, 62, 63, 64)} and the different measures of party unity (roll-call votes and speech dissent). $\beta$ is the parameter of interest, $\mu_t$  fixed effects for Congress and $ \delta X_i $ legislator characteristics. For equation (2), $T_t$ is a dummy that equals 1 if congress have reelection incentives.  
+
+
+
+\end{document}

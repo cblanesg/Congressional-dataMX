@@ -1,0 +1,151 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[a4paper, total={6in, 10in}]{geometry}
+
+\title{Summary Statistics}
+
+\author{Camila Blanes}
+\date{}
+\begin{document}
+\section*{Appendix: Policy Position}
+
+\subsection{Roll Call Votes}
+To study ideal positioning of legislators in the Chamber, I collected data on roll-call votes for each session. In total there are over XXX individual roll-call votes linked to specific candidates. From this data I scale legislators ideologically, using W-NOMINATE algorithm. This algorithm assumes probabilistic voting based on a spatial utility function. The parameters of the utility function and the spatial coordinates of the legislators and the votes are estimated on the basis of observed voting behavior. \\
+\\
+As with any scaling method, the polarities of the estimated coordinates in W-NOMINATE are arbitrary. It is required the specification of a legislator to be positive in each dimension. To orient the estimated results and therefore be consistent across terms, I obtained the Poole's Optimal Classification scores from the roll call votes and obtain the most conservative legislator of the party \textit{"Partido Accion Nacional"}, which is consider the most conservative party. This resulting legislator will be the specification for the W-NOMINATE scaling and therefore set the direction of the scores. Having conservatives on the right and liberals on the left, so ‘positive’ in this case generally means conservative. 
+\subsubsection*{W-NOMINATE Scores}
+
+For all \textit{Legislaturas} each member on chamber has an ideal point. 
+
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.5\textwidth}
+		\centering
+	\caption{Ideal Point Estimates \textit{Legislatura LX}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominateLX.png}
+		\label{fig:test1}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+		\centering
+	\caption{\textit{Legislatura LX}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominate_densityLX.png}
+		\label{fig:test2}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.5\textwidth}
+		\centering
+			\caption{\textit{Legislatura LXI}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominateLXI.png}
+		\label{fig:test1}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+		\centering
+			\caption{\textit{Legislatura LXI}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominate_densityLXI.png}
+		\label{fig:test2}
+	\end{minipage}
+\end{figure} 
+
+\begin{figure}[h!]
+	\centering
+	\begin{minipage}{.5\textwidth}
+		\centering
+			\caption{\textit{Legislatura LXII}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominateLXII.png}
+		\label{fig:test1}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+	\centering
+	\caption{Ideal Point Density \textit{Legislatura LXII}}
+	\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominate_densityLXII.png}
+	\label{fig:test1}
+\end{minipage}%
+\end{figure}
+
+
+
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\caption{\textit{Legislatura LXIII}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominateLXIII.png}
+		\label{fig:test1}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\caption{\textit{Legislatura LXIII}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominate_densityLXIII.png}
+		\label{fig:test2}
+	\end{minipage}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\caption{\textit{Legislatura LXIV}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominateLXIV.png}
+		\label{fig:test1}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\caption{\textit{Legislatura LXIV}}
+		\includegraphics[width=1\linewidth]{/Users/cblanesg/cam.blanes Dropbox/Camila Blanes/Congressional-dataMX/data/02-outcomes/01-policy_positioning/00-roll_call/02-graphs/dw_nominate_densityLXIV.png}
+		\label{fig:test2}
+	\end{minipage}
+\end{figure} 
+
+
+\newpage
+\subsubsection*{Ideal Points for Type of Members and Before-After the Electoral Reform}
+Party Line is defined as the median ideal point of the members of the same party. For each member it was estimated the absolute difference between their ideal point and the party line. 
+
+
+\begin{table}[!htbp] \centering 
+	\caption{Differences between \textbf{Type of Legislators}}
+	\begin{tabular}{@{\extracolsep{4pt}} ccccc} 
+		\\[-1.8ex]\hline 
+		\hline \\[-1.8ex] 
+		& Variable & PR & SSD & Difference of means  \\ 
+		\hline \\[-1.8ex] 
+		& Deviation in Ideology Position &  0.076 &  0.0774 &  -0.0222   \\ 
+		& &   &  &  (0.0065) \\ 
+		\hline \\[-1.8ex] 
+	\end{tabular} 
+\end{table} 
+
+\begin{table}[!htbp] \centering 
+	\caption{Differences between \textbf{Electoral Reform}}
+	\begin{tabular}{@{\extracolsep{4pt}} ccccc} 
+		\\[-1.8ex]\hline 
+		\hline \\[-1.8ex] 
+		& Variable & Long Track  & Short Track & Difference of means  \\ 
+		\hline \\[-1.8ex] 
+		& Deviation in Ideology Position  & 0.059 & 0.0815 &  0.021*** \\ 
+		& &   &  &  (0.0061) \\ 
+		\hline \\[-1.8ex] 
+	\end{tabular} 
+\end{table} 
+
+\begin{table}[t] \centering 
+	\caption{Deviation from Party Line}
+	\begin{tabular}{@{\extracolsep{4pt}} ccccc} 
+		\\[-1.8ex]\hline 
+		\hline \\[-1.8ex] 
+		&  & PR & SSD & \\ 
+		\hline \\[-1.8ex] 
+		& Before Reform& 0.076 & 0.0814&    \\ 
+		&  After Reform  & 0.0576&0.0609 &   \\ 
+		\hline \\[-1.8ex] 
+	\end{tabular} 
+	\\
+	\textit{Notes:} N = 2500
+\end{table} 
+\newpage
+The estimate ideal points of each member in the Congress is result of both ideology and strategic behavior. We don't know the degree to which the position in the behavior is the result of strategic considerations or untainted ideology. From Table 1 we can see that after the Electoral Reform the deviation from the party line decreased for both types of legislator, but the effect for Proportional Representation members was stronger.  
+
+\end{document}
