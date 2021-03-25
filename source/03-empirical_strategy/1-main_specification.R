@@ -12,9 +12,7 @@ lapply(list.packages,
        require,
        character.only = TRUE)
 
-
 ### Load data
-
 load('03-empirical_strategy/1-input_reg/data_reg.Rda', verbose = TRUE)
 
 ### Specification
@@ -24,10 +22,7 @@ dep.var <- c('index_effort',
 
 group.controls <- 'as.factor(ssd_legis)'
 reelection.treatment <- 'as.factor(reelection_dummy)'
-control.party = 'as.factor(main_parties)'
-
-# data_reg <- data_reg %>%
-#   mutate(main_parties = ifelse(main_parties != "small parties", 1, 0))
+control.party = 'as.factor(party_size)'
 
 interaction.cov <- paste0('as.factor(ssd_legis)*', 
                           'as.factor(reelection_dummy)')
@@ -43,8 +38,35 @@ controls.1 <- c('as.factor(female)', ## male, female
                # 'carrera_deportiva' ##  experience in sports
                 )
 
+
+data_num_members <- data_reg %>%
+  mutate(partido = ifelse(partido %in% c('pve', 'partido verde ecologista'), 'pvem', 
+                          ifelse(partido == 'morenal', 'morena', 
+                                 ifelse(partido == 'encuentro social', 'es', 
+                                        ifelse(partido == 'sin partido', 'sp', 
+                                               ifelse(partido == 'movimiento ciudadano', 'mc', partido)))))) %>%
+  group_by(legislatura, partido) %>%
+  count() %>%
+  group_by(legislatura) %>%
+  mutate(mean_members = mean(n), 
+         party_size = ifelse(n >= mean_members, 1, 0)) %>%
+  select(legislatura, partido, party_size)
+
+
+data_reg_clean <- data_reg  %>%
+  mutate(partido = ifelse(partido %in% c('pve', 'partido verde ecologista'), 'pvem', 
+                          ifelse(partido == 'morenal', 'morena', 
+                                 ifelse(partido == 'encuentro social', 'es', 
+                                        ifelse(partido == 'sin partido', 'sp', 
+                                               ifelse(partido == 'movimiento ciudadano', 'mc', partido)))))) %>%
+  mutate(partido = ifelse(nombre_completo == 'Morales Vázquez Carlos Alberto', 'prd', 
+                          ifelse(nombre_completo == 'Pérez Rivera Evaristo Lenin', 'pan', 
+                                 ifelse(nombre_completo == 'Riojas Martínez Ana Lucia', 'sp', partido)))) %>%
+  left_join(data_num_members, by = c('legislatura', 'partido')) 
+
 fit.main <- coef.main <- se.cse.disaggregated.1 <- vector("list", length(dep.var))
 fit.main1.2 <- coef.main1.2 <- se.cse.disaggregated1.2 <- vector("list", length(dep.var))
+fit.main1.3 <- coef.main1.3 <- se.cse.disaggregated1.3 <- vector("list", length(dep.var))
 
 for(i in 1:length(dep.var)){
   formula.main <- as.formula(paste0(dep.var[i],  ## variable dependiente (productividad, disciplina partidista: voting, speech)
@@ -63,7 +85,7 @@ for(i in 1:length(dep.var)){
                                           collapse = "+")))
   
   fit.main[[i]] <- lm(formula.main, 
-                   data = data_reg)
+                   data = data_reg_clean)
   
 }
 
@@ -84,28 +106,47 @@ for(i in 1:length(dep.var)){
                                           collapse = "+")))
   
   fit.main1.2[[i]] <- lm(formula.main, 
-                      data = data_reg)
+                      data = data_reg_clean)
   
 }
 
-stargazer::stargazer(fit.main[1], 
-                     fit.main[2], 
-                     fit.main[3], 
-                     type = 'text')
+party.control <- 'partido'
+
+for(i in 1:length(dep.var)){
+  formula.main <- as.formula(paste0(dep.var[i],  ## variable dependiente (productividad, disciplina partidista: voting, speech)
+                                    '~', 
+                                    group.controls, ##  MR o PR
+                                    '+', 
+                                    reelection.treatment, ## posibilidad de reeleccion 
+                                    '+', 
+                                    interaction.cov, ## interaction tipo y periodo
+                                    '+',
+                                    control.congress, ## FE by congress
+                                    '+',
+                                    party.control, ## FE by party
+                                     '+',
+                                    paste(controls.1, ## covariates individual legislator
+                                          collapse = "+")))
+  
+  fit.main1.3[[i]] <- lm(formula.main, 
+                         data = data_reg_clean)
+  
+}
 
 stargazer::stargazer(fit.main[1], 
                      fit.main1.2[1], 
                      fit.main[2], 
                      fit.main1.2[2], 
                      fit.main[3],
-                     fit.main1.2[3], 
+                     fit.main1.2[3],
                      omit = 'legislatura',
-                     add.lines = list(c('\\textbf{Congress controls}', rep('Yes', 6)), 
-                                      c('\\textbf{Party controls}', 'Yes', 'No','Yes', 'No','Yes', 'No')), 
+                     add.lines = list(c('\\textbf{Congress controls}', rep('Yes', 9)) 
+                                      #,c('\\textbf{Party controls}', 'Yes', 'No','Yes', 'No','Yes', 'No')
+                     ), 
                      omit.stat = c("ser", "rsq","f"),
                      covariate.labels = c('SMD',
                                           'reelection',
-                                          'main party',
+                                          'party size',
                                           'female',
                                           'education',
                                           'political experience',
@@ -115,11 +156,37 @@ stargazer::stargazer(fit.main[1],
                                           'academic experience',
                                           'SMD x reelection'),
                      dep.var.labels  = c('legislative effort', 
-                                        'distance w/party in votes', 
-                                        'distance w/party in speech'),
+                                         'distance w/party in votes', 
+                                         'distance w/party in speech'),
                      notes = c("Standard Errors in parentheses")
                      #,type = 'text'
-                     )
+)
+
+stargazer::stargazer(fit.main1.3[1], 
+                     fit.main1.3[2], 
+                     fit.main1.3[3],
+                     omit = 'legislatura',
+                     add.lines = list(c('\\textbf{Congress controls}', rep('Yes', 9)) 
+                                      #,c('\\textbf{Party controls}', 'Yes', 'No','Yes', 'No','Yes', 'No')
+                     ), 
+                     omit.stat = c("ser", "rsq","f"),
+                     # covariate.labels = c('SMD',
+                     #                      'reelection',
+                     #                      'main party',
+                     #                      'female',
+                     #                      'education',
+                     #                      'political experience',
+                     #                      'exp. private sector',
+                     #                      'exp. public administration',
+                     #                      'exp. non-profit org.',
+                     #                      'academic experience',
+                     #                      'SMD x reelection'),
+                     dep.var.labels  = c('legislative effort', 
+                                         'distance w/party in votes', 
+                                         'distance w/party in speech'),
+                     notes = c("Standard Errors in parentheses")
+                     ,type = 'text'
+)
 
 
 ##### Same specification with type of PR legislators
@@ -207,7 +274,7 @@ for(i in 1:length(dep.var)){
                                           collapse = "+")))
   
   fit.main2[[i]] <- lm(formula.main, 
-                       data = data_reg)
+                       data = data_reg_clean)
   
 }
 
@@ -226,7 +293,7 @@ stargazer::stargazer(fit.main2[1],
                      covariate.labels = c('SMD loose election', 
                                           'PR', 
                                           'reelection', 
-                                          'main party',
+                                          'size party',
                                           'female', 
                                           'education', 
                                           'political experience', 

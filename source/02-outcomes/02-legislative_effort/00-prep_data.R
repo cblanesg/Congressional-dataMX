@@ -146,7 +146,9 @@ write.csv(data_effort, file = '../02-outcomes/02-legislative_effort/effort_data.
 
 ## correlation between effort variables
 
-res <- cor(select(data_effort, number_committees, share_speech, number_bills, pct_attendance))
+data_effort <- read_csv('data/02-outcomes/02-legislative_effort/effort_data.csv')
+
+res <- cor(select(data_effort, number_committees, count_speech, number_bills, pct_attendance))
 round(res, 2)
 
 
