@@ -42,7 +42,7 @@ discipline_data = all_estimates %>%
   group_by(legislatura, inc_party, topic)  %>%
   mutate(median_party = median(estimated_theta), 
             mean_party = mean(estimated_theta))%>%
-  ungroup()%>%
+  ungroup() %>%
   mutate(party_discipline = estimated_theta - median_party)
 
 

@@ -40,29 +40,29 @@ controls.1 <- c('as.factor(female)', ## male, female
 
 
 data_num_members <- data_reg %>%
-  mutate(partido = ifelse(partido %in% c('pve', 'partido verde ecologista'), 'pvem', 
-                          ifelse(partido == 'morenal', 'morena', 
-                                 ifelse(partido == 'encuentro social', 'es', 
-                                        ifelse(partido == 'sin partido', 'sp', 
+  mutate(partido = ifelse(partido %in% c('pve', 'partido verde ecologista'), 'pvem',
+                          ifelse(partido == 'morenal', 'morena',
+                                 ifelse(partido == 'encuentro social', 'es',
+                                        ifelse(partido == 'sin partido', 'sp',
                                                ifelse(partido == 'movimiento ciudadano', 'mc', partido)))))) %>%
   group_by(legislatura, partido) %>%
   count() %>%
   group_by(legislatura) %>%
-  mutate(mean_members = mean(n), 
+  mutate(mean_members = mean(n),
          party_size = ifelse(n >= mean_members, 1, 0)) %>%
   select(legislatura, partido, party_size)
 
 
 data_reg_clean <- data_reg  %>%
-  mutate(partido = ifelse(partido %in% c('pve', 'partido verde ecologista'), 'pvem', 
-                          ifelse(partido == 'morenal', 'morena', 
-                                 ifelse(partido == 'encuentro social', 'es', 
-                                        ifelse(partido == 'sin partido', 'sp', 
+  mutate(partido = ifelse(partido %in% c('pve', 'partido verde ecologista'), 'pvem',
+                          ifelse(partido == 'morenal', 'morena',
+                                 ifelse(partido == 'encuentro social', 'es',
+                                        ifelse(partido == 'sin partido', 'sp',
                                                ifelse(partido == 'movimiento ciudadano', 'mc', partido)))))) %>%
-  mutate(partido = ifelse(nombre_completo == 'Morales Vázquez Carlos Alberto', 'prd', 
-                          ifelse(nombre_completo == 'Pérez Rivera Evaristo Lenin', 'pan', 
+  mutate(partido = ifelse(nombre_completo == 'Morales Vázquez Carlos Alberto', 'prd',
+                          ifelse(nombre_completo == 'Pérez Rivera Evaristo Lenin', 'pan',
                                  ifelse(nombre_completo == 'Riojas Martínez Ana Lucia', 'sp', partido)))) %>%
-  left_join(data_num_members, by = c('legislatura', 'partido')) 
+  left_join(data_num_members, by = c('legislatura', 'partido'))
 
 fit.main <- coef.main <- se.cse.disaggregated.1 <- vector("list", length(dep.var))
 fit.main1.2 <- coef.main1.2 <- se.cse.disaggregated1.2 <- vector("list", length(dep.var))
@@ -133,6 +133,9 @@ for(i in 1:length(dep.var)){
   
 }
 
+save(fit.main, file = '03-empirical_strategy/2-reg_results/reg_main_party.Rda')
+save(fit.main1.2, file = '03-empirical_strategy/2-reg_results/reg_main.Rda')
+
 stargazer::stargazer(fit.main[1], 
                      fit.main1.2[1], 
                      fit.main[2], 
@@ -159,7 +162,7 @@ stargazer::stargazer(fit.main[1],
                                          'distance w/party in votes', 
                                          'distance w/party in speech'),
                      notes = c("Standard Errors in parentheses")
-                     #,type = 'text'
+                     ,type = 'text'
 )
 
 stargazer::stargazer(fit.main1.3[1], 
